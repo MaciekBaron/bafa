@@ -129,3 +129,40 @@ The scripts distinguish between:
 - **Comments with replies**: May be addressed/resolved
 - **Comments without replies**: Likely need attention
 - **Outdated comments**: Automatically filtered out (when code changes)
+
+## Git Bisect Scripts
+
+### `git-bisect-auto.sh`
+**Purpose**: Automatically find the first breaking commit using git bisect
+
+**Usage**:
+```bash
+./git-bisect-auto.sh <good_commit> <test_command>
+```
+
+**Examples**:
+```bash
+# Find when tests started failing
+./git-bisect-auto.sh HEAD~10 "npm test"
+
+# Find when build broke
+./git-bisect-auto.sh abc123 "make build"
+
+# Find when specific script fails
+./git-bisect-auto.sh v1.0.0 "python -m pytest tests/test_feature.py"
+```
+
+**Features**:
+- 🎯 Automatically marks current commit as bad and specified commit as good
+- 🔄 Runs git bisect automatically using the provided test command
+- 🧹 Cleans up temporary files and provides clear output
+- ⚡ Stops as soon as the first bad commit is found
+- 📋 Shows instructions for resetting bisect state when done
+
+**How it works**:
+1. Validates inputs and git repository status
+2. Starts git bisect with current commit as bad
+3. Marks the specified commit as good
+4. Creates temporary script with your test command
+5. Runs `git bisect run` to automatically find the breaking commit
+6. Cleans up and shows results
