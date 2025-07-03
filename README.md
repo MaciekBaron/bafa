@@ -28,7 +28,7 @@ Scripts to analyze comments and discussions on GitHub Pull Requests using the Gi
 ./get-pr-comments.sh 260
 
 # Specify both PR number and repository
-./get-pr-comments.sh 260 ONSdigital/dis-wagtail
+./get-pr-comments.sh 260 MaciekBaron/bafa
 ```
 
 **Output**: Detailed view of review comments and general PR comments with metadata
@@ -50,8 +50,8 @@ Scripts to analyze comments and discussions on GitHub Pull Requests using the Gi
 ./get-unresolved-pr-comments-minimal.sh 260
 
 # Specify both PR number and repository
-./get-unresolved-pr-comments.sh 260 ONSdigital/dis-wagtail
-./get-unresolved-pr-comments-minimal.sh 260 ONSdigital/dis-wagtail
+./get-unresolved-pr-comments.sh 260 MaciekBaron/bafa
+./get-unresolved-pr-comments-minimal.sh 260 MaciekBaron/bafa
 ```
 
 **Features** (`get-unresolved-pr-comments.sh`):
@@ -78,7 +78,7 @@ Scripts to analyze comments and discussions on GitHub Pull Requests using the Gi
 ./get-pr-comments-json.sh 260
 
 # Specify both PR number and repository
-./get-pr-comments-json.sh 260 ONSdigital/dis-wagtail
+./get-pr-comments-json.sh 260 MaciekBaron/bafa
 ```
 
 **Output**: Structured JSON with all comments, perfect for scripting
@@ -86,7 +86,7 @@ Scripts to analyze comments and discussions on GitHub Pull Requests using the Gi
 **Example JSON structure**:
 ```json
 {
-  "repository": "ONSdigital/dis-wagtail",
+  "repository": "MaciekBaron/bafa",
   "pr_number": 260,
   "total_comments": 6,
   "review_comments": 6,
