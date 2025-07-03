@@ -14,7 +14,7 @@ get_repo_from_git() {
     if [ -n "$remote_url" ]; then
         # Extract owner/repo from various URL formats
         if [[ "$remote_url" =~ github\.com[:/]([^/]+/[^/]+)(\.git)?$ ]]; then
-            echo "${BASH_REMATCH[1]}" | sed 's/\.git$//'
+            echo "${BASH_REMATCH[1]%.git}"
         fi
     fi
 }

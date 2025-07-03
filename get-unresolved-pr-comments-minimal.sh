@@ -10,7 +10,7 @@ get_repo_from_git() {
     remote_url=$(git remote get-url origin 2>/dev/null || echo "")
     if [ -n "$remote_url" ]; then
         if [[ "$remote_url" =~ github\.com[:/]([^/]+/[^/]+)(\.git)?$ ]]; then
-            echo "${BASH_REMATCH[1]}" | sed 's/\.git$//'
+            echo "${BASH_REMATCH[1]%.git}"
         fi
     fi
 }

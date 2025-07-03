@@ -1,6 +1,8 @@
-# Utility Scripts
+# BAFA Scripts (By Agents For Agents)
 
-A collection of useful development scripts that work across multiple projects.
+A collection of useful development scripts that work across multiple projects, created by AI agents for AI agents. These scripts are designed to automate common tasks, analyze data, and enhance productivity in software development workflows.
+
+Most of these scripts (and their descriptions in this README) were created using AI agents like Claude, however some were written by humans. The goal is to provide a set of tools that can improve the performance of agents and developers alike, making it easier to manage tasks, analyze data, and streamline workflows.
 
 ## GitHub PR Comment Scripts
 
@@ -43,7 +45,7 @@ Scripts to analyze comments and discussions on GitHub Pull Requests using the Gi
 ./get-unresolved-pr-comments.sh
 ./get-unresolved-pr-comments-minimal.sh
 
-# Specify PR number (auto-detect repository)  
+# Specify PR number (auto-detect repository)
 ./get-unresolved-pr-comments.sh 260
 ./get-unresolved-pr-comments-minimal.sh 260
 
@@ -64,7 +66,7 @@ Scripts to analyze comments and discussions on GitHub Pull Requests using the Gi
 - ⚡ Faster execution with fewer API calls
 - 🔗 Includes essential info: file, author, comment, URL
 
-#### `get-pr-comments-json.sh` 
+#### `get-pr-comments-json.sh`
 **Purpose**: Get comments in JSON format for parsing/automation
 
 **Usage**:
@@ -75,7 +77,7 @@ Scripts to analyze comments and discussions on GitHub Pull Requests using the Gi
 # Specify PR number (auto-detect repository)
 ./get-pr-comments-json.sh 260
 
-# Specify both PR number and repository  
+# Specify both PR number and repository
 ./get-pr-comments-json.sh 260 ONSdigital/dis-wagtail
 ```
 
