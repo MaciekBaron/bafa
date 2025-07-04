@@ -177,13 +177,20 @@ behave tests/ --format=plain -Tk 2>&1 | clean_behave.py
 
 **Usage**:
 ```bash
+# With explicit good commit
 ./git-bisect-auto.sh <good_commit> <test_command>
+
+# Auto-assume mode (HEAD is bad, HEAD^ is good)
+./git-bisect-auto.sh <test_command>
 ```
 
 **Examples**:
 ```bash
-# Find when tests started failing
+# Find when tests started failing (explicit good commit)
 ./git-bisect-auto.sh HEAD~10 "npm test"
+
+# Auto-assume mode - current commit is bad, parent is good
+./git-bisect-auto.sh "npm test"
 
 # Find when build broke
 ./git-bisect-auto.sh abc123 "make build"
@@ -193,16 +200,57 @@ behave tests/ --format=plain -Tk 2>&1 | clean_behave.py
 ```
 
 **Features**:
-- 🎯 Automatically marks current commit as bad and specified commit as good
+- 🎯 Automatically marks commits as bad/good based on your input
 - 🔄 Runs git bisect automatically using the provided test command
 - 🧹 Cleans up temporary files and provides clear output
 - ⚡ Stops as soon as the first bad commit is found
 - 📋 Shows instructions for resetting bisect state when done
+- 🤖 Auto-assume mode: when no good commit is specified, assumes HEAD is bad and HEAD^ is good
 
 **How it works**:
 1. Validates inputs and git repository status
-2. Starts git bisect with current commit as bad
-3. Marks the specified commit as good
+2. Determines good/bad commits (explicit or auto-assumed)
+3. Starts git bisect with appropriate commits
 4. Creates temporary script with your test command
 5. Runs `git bisect run` to automatically find the breaking commit
+6. Cleans up and shows results
+
+### `git-bisect-auto-finder.sh`
+**Purpose**: Automatically find a good commit by jumping backwards in history, then run git bisect
+
+**Usage**:
+```bash
+# Default jump size (10 commits)
+./git-bisect-auto-finder.sh <test_command>
+
+# Custom jump size
+./git-bisect-auto-finder.sh <jump_size> <test_command>
+```
+
+**Examples**:
+```bash
+# Find good commit jumping 10 commits at a time
+./git-bisect-auto-finder.sh "npm test"
+
+# Find good commit jumping 20 commits at a time
+./git-bisect-auto-finder.sh 20 "make build"
+
+# Find good commit for specific test
+./git-bisect-auto-finder.sh 5 "python -m pytest tests/test_feature.py"
+```
+
+**Features**:
+- 🔍 Automatically searches backwards in history to find a good commit
+- 🎯 Uses configurable jump size for efficient searching
+- 🔄 Automatically runs git bisect once good commit is found
+- 🤖 Assumes current HEAD is the bad commit
+- 🧹 Handles edge cases like reaching repository beginning
+- ⚡ Efficient binary search combined with initial good commit discovery
+
+**How it works**:
+1. Assumes current HEAD is the bad commit
+2. Jumps backwards in history by specified intervals
+3. Tests each commit until a good one is found
+4. Automatically starts git bisect with found good commit and current bad commit
+5. Runs `git bisect run` to find the exact breaking commit
 6. Cleans up and shows results
