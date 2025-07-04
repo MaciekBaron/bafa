@@ -130,6 +130,46 @@ The scripts distinguish between:
 - **Comments without replies**: Likely need attention
 - **Outdated comments**: Automatically filtered out (when code changes)
 
+## Testing Scripts
+
+### `clean_behave.py`
+**Purpose**: Clean and filter behave test output for reduced verbosity and better AI agent consumption
+
+**Usage**:
+```bash
+# Pipe behave output through the cleaner (requires --format=plain -Tk)
+behave tests/ --format=plain -Tk 2>&1 | ./clean_behave.py
+
+# Use with any behave command
+behave --tags=@smoke --format=plain -Tk 2>&1 | ./clean_behave.py
+
+# If util_scripts is in PATH:
+behave tests/ --format=plain -Tk 2>&1 | clean_behave.py
+```
+
+**Prerequisites**:
+- Behave command must be run with `--format=plain -Tk` flags for proper output formatting
+
+**Features**:
+- 🎯 Filters out irrelevant test output (database creation/destruction messages)
+- 📊 Shows only active test results (scenarios and failed steps)
+- 🧹 Provides clean, concise output optimized for AI agents
+- ⚡ Reduces token usage by removing verbose passing step details
+- 📋 Preserves essential information: feature names, scenario titles, failures, and summary
+
+**What it filters**:
+- Database creation/destruction messages
+- Individual "... passed" step lines
+- Background sections
+- Empty lines not part of error blocks
+- Verbose feature headers for features with no active content
+
+**What it preserves**:
+- Feature names (only when they contain active scenarios or failures)
+- Scenario titles (truncated before "...")
+- Failed step details and error messages
+- Final test summary and statistics
+
 ## Git Bisect Scripts
 
 ### `git-bisect-auto.sh`
