@@ -4,6 +4,8 @@ A collection of useful development scripts that work across multiple projects, c
 
 Most of these scripts (and their descriptions in this README) were created using AI agents like Claude, however some were written by humans. The goal is to provide a set of tools that can improve the performance of agents and developers alike, making it easier to manage tasks, analyze data, and streamline workflows.
 
+Scripts are written in Bash and Python.
+
 ## GitHub PR Comment Scripts
 
 Scripts to analyze comments and discussions on GitHub Pull Requests using the GitHub CLI (`gh`).
@@ -143,7 +145,7 @@ behave tests/ --format=plain -Tk 2>&1 | ./clean_behave.py
 # Use with any behave command
 behave --tags=@smoke --format=plain -Tk 2>&1 | ./clean_behave.py
 
-# If util_scripts is in PATH:
+# If folder with script is in PATH:
 behave tests/ --format=plain -Tk 2>&1 | clean_behave.py
 ```
 
