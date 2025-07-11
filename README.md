@@ -6,6 +6,21 @@ Most of these scripts (and their descriptions in this README) were created using
 
 Scripts are written in Bash and Python.
 
+## Table of Contents
+
+- [GitHub PR Comment Scripts](#github-pr-comment-scripts)
+  - [get-pr-comments.sh](#get-pr-commentssh)
+  - [get-unresolved-pr-comments.sh](#get-unresolved-pr-commentssh)
+  - [get-unresolved-pr-comments-minimal.sh](#get-unresolved-pr-comments-minimalsh)
+  - [get-pr-comments-json.sh](#get-pr-comments-jsonsh)
+- [Testing Scripts](#testing-scripts)
+  - [clean_behave.py](#clean_behavepy)
+- [Git Bisect Scripts](#git-bisect-scripts)
+  - [git-bisect-auto.sh](#git-bisect-autosh)
+  - [git-bisect-auto-finder.sh](#git-bisect-auto-findersh)
+- [Git Worktree Scripts](#git-worktree-scripts)
+  - [git-claude-worktree.sh](#git-claude-worktreesh)
+
 ## GitHub PR Comment Scripts
 
 Scripts to analyze comments and discussions on GitHub Pull Requests using the GitHub CLI (`gh`).
@@ -256,3 +271,48 @@ behave tests/ --format=plain -Tk 2>&1 | clean_behave.py
 4. Automatically starts git bisect with found good commit and current bad commit
 5. Runs `git bisect run` to find the exact breaking commit
 6. Cleans up and shows results
+
+## Git Worktree Scripts
+
+### `git-claude-worktree.sh`
+**Purpose**: Automates the creation of a Git worktree and symlinks CLAUDE*.md files from the main worktree to the new one
+
+**Usage**:
+```bash
+# Create worktree with specific branch/commit
+./git-claude-worktree.sh <new_worktree_path> [<commit-ish_or_branch>]
+
+# Create worktree with Git's default behavior
+./git-claude-worktree.sh <new_worktree_path>
+```
+
+**Examples**:
+```bash
+# Create worktree for feature branch
+./git-claude-worktree.sh ../feature-x-worktree feature/my-new-feature
+
+# Create worktree for hotfix
+./git-claude-worktree.sh /tmp/hotfix-worktree hotfix/urgent-bug
+
+# Create worktree with default Git behavior
+./git-claude-worktree.sh ../testing-worktree
+```
+
+**Features**:
+- 🔧 Automatically creates new Git worktree at specified path
+- 📋 Symlinks all CLAUDE*.md files from main worktree to new worktree
+- 🔗 Uses relative symlinks for portability
+- 🛡️ Validates Git repository and dependencies before execution
+- ⚠️ Handles existing files gracefully (skips if already exists)
+- 📍 Supports both absolute and relative paths
+
+**Prerequisites**:
+- Git repository
+- `realpath` command (install with `brew install coreutils` on macOS)
+
+**How it works**:
+1. Validates Git repository and required tools
+2. Creates new worktree using `git worktree add`
+3. Searches for CLAUDE*.md files in main worktree root
+4. Creates relative symlinks to these files in the new worktree
+5. Provides instructions for next steps
