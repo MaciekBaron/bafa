@@ -20,6 +20,8 @@ Scripts are written in Bash and Python.
   - [git-bisect-auto-finder.sh](#git-bisect-auto-findersh)
 - [Git Worktree Scripts](#git-worktree-scripts)
   - [git-claude-worktree.sh](#git-claude-worktreesh)
+- [Code Quality Scripts](#code-quality-scripts)
+  - [whitespacefix.sh](#whitespacefixsh)
 
 ## GitHub PR Comment Scripts
 
@@ -316,3 +318,37 @@ behave tests/ --format=plain -Tk 2>&1 | clean_behave.py
 3. Searches for CLAUDE*.md files in main worktree root
 4. Creates relative symlinks to these files in the new worktree
 5. Provides instructions for next steps
+
+## Code Quality Scripts
+
+### `whitespacefix.sh`
+**Purpose**: Cleans up whitespace in text files according to standardized rules - designed for use as a development hook
+
+**Usage**:
+```bash
+# Fix whitespace in specific files
+./whitespacefix.sh file1.txt file2.py
+
+# Fix multiple files at once
+./whitespacefix.sh src/*.py tests/*.py
+
+# Common use as a pre-commit hook
+./whitespacefix.sh $(git diff --cached --name-only --diff-filter=ACM)
+```
+
+**Features**:
+- 🧹 Removes trailing whitespace from all lines
+- 📋 Removes lines that contain only whitespace
+- 📄 Ensures files end with a single newline character
+- 🔧 Designed for use as a development hook (Git, Claude Code, etc.)
+- ⚡ Processes multiple files efficiently
+- 🛡️ Validates file existence and handles errors gracefully
+
+**Hook Integration**:
+This script is intended to be used as a development hook to automatically fix whitespace issues. Can be integrated with Git hooks (`.git/hooks/pre-commit`), Claude Code hooks, or other development workflow automation systems.
+
+**What it fixes**:
+- Trailing spaces and tabs at end of lines
+- Empty lines containing only whitespace characters
+- Missing newline at end of file
+- Multiple trailing newlines (reduces to single newline)
