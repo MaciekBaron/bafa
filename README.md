@@ -343,9 +343,15 @@ behave tests/ --format=plain -Tk 2>&1 | clean_behave.py
 - 🔧 Designed for use as a development hook (Git, Claude Code, etc.)
 - ⚡ Processes multiple files efficiently
 - 🛡️ Validates file existence and handles errors gracefully
+- 🎯 Returns exit code 1 if changes were made (useful for automation)
+- 📊 Provides clear feedback: "Whitespace issues have been fixed" or "No changes made"
+
+**Exit Codes**:
+- `0`: No whitespace issues found
+- `1`: Whitespace issues were detected and fixed
 
 **Hook Integration**:
-This script is intended to be used as a development hook to automatically fix whitespace issues. Can be integrated with Git hooks (`.git/hooks/pre-commit`), Claude Code hooks, or other development workflow automation systems.
+This script is ideal for development hooks that need to detect and fix whitespace issues. The exit code allows automation systems to determine if files were modified. Can be integrated with Git hooks (`.git/hooks/pre-commit`), Claude Code hooks, or other development workflow automation systems.
 
 **What it fixes**:
 - Trailing spaces and tabs at end of lines

@@ -15,6 +15,9 @@ if [ "$#" -eq 0 ]; then
     exit 1
 fi
 
+# Track if any changes were made
+changes_made=false
+
 # Loop through each file provided as a command-line argument.
 for file in "$@"; do
     # Check if the file exists and is a regular file.
@@ -24,6 +27,9 @@ for file in "$@"; do
     fi
 
     echo "Processing '$file'..."
+
+    # Get checksum before processing to detect changes
+    before_checksum=$(shasum "$file" 2>/dev/null || echo "")
 
     # 1. Remove trailing whitespace from every line.
     #    The `sed` command with `s/[[:space:]]*$//` finds any sequence of whitespace
@@ -45,7 +51,18 @@ for file in "$@"; do
     if [ -n "$(tail -c1 "$file")" ]; then
         echo "" >> "$file"
     fi
+
+    # Check if file was modified
+    after_checksum=$(shasum "$file" 2>/dev/null || echo "")
+    if [ "$before_checksum" != "$after_checksum" ]; then
+        changes_made=true
+    fi
 done
 
-echo "Whitespace fixing complete."
+if [ "$changes_made" = true ]; then
+    echo "Whitespace issues have been fixed"
+    exit 1
+else
+    echo "No changes made"
+fi
 
