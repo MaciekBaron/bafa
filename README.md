@@ -22,6 +22,8 @@ Scripts are written in Bash and Python.
   - [git-claude-worktree.sh](#git-claude-worktreesh)
 - [Code Quality Scripts](#code-quality-scripts)
   - [whitespacefix.sh](#whitespacefixsh)
+- [System Monitoring Scripts](#system-monitoring-scripts)
+  - [idle-check.sh](#idle-checksh)
 
 ## GitHub PR Comment Scripts
 
@@ -358,3 +360,47 @@ This script is ideal for development hooks that need to detect and fix whitespac
 - Empty lines containing only whitespace characters
 - Missing newline at end of file
 - Multiple trailing newlines (reduces to single newline)
+
+## System Monitoring Scripts
+
+### `idle-check.sh`
+**Purpose**: Monitors user idle time on macOS and sends push notifications via ntfy.sh when idle threshold is exceeded
+
+**Usage**:
+```bash
+# Run with default settings (60 second threshold)
+./idle-check.sh
+
+# Configure via environment variables
+IDLE_THRESHOLD_SECONDS=300 NTFY_CLAUDE_TOPIC=mytopic ./idle-check.sh
+```
+
+**Configuration**:
+- `IDLE_THRESHOLD_SECONDS`: Idle time threshold in seconds (default: 60)
+- `NTFY_CLAUDE_TOPIC`: ntfy.sh topic for notifications (default: "mytopic")
+
+**Features**:
+- 🕒 Monitors system idle time using macOS ioreg command
+- 📱 Sends push notifications via ntfy.sh service
+- ⚙️ Configurable idle time threshold
+- 🔧 Environment variable configuration support
+- 🛡️ Error handling for idle time retrieval failures
+- 📊 Clear status reporting and logging
+
+**Prerequisites**:
+- macOS system (uses ioreg command)
+- Internet connection for ntfy.sh notifications
+- curl command available
+
+**How it works**:
+1. Queries macOS HIDIdleTime using ioreg command
+2. Converts idle time from nanoseconds to seconds
+3. Compares current idle time against configured threshold
+4. Sends notification via ntfy.sh if threshold exceeded
+5. Provides status feedback for monitoring/logging
+
+**Common Use Cases**:
+- CI/CD pipeline monitoring (notify when builds complete during idle periods)
+- Development workflow automation (alert when long-running tasks finish)
+- System administration monitoring
+- Integration with cron jobs for periodic idle checks
