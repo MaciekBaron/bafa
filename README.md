@@ -24,6 +24,9 @@ Scripts are written in Bash and Python.
   - [whitespacefix.sh](#whitespacefixsh)
 - [System Monitoring Scripts](#system-monitoring-scripts)
   - [idle-check.sh](#idle-checksh)
+- [Claude Code Hooks](#claude-code-hooks)
+  - [git_commit_hook.py](#git_commit_hookpy)
+  - [ruff_check.py](#ruff_checkpy)
 
 ## GitHub PR Comment Scripts
 
@@ -404,3 +407,129 @@ IDLE_THRESHOLD_SECONDS=300 NTFY_CLAUDE_TOPIC=mytopic ./idle-check.sh
 - Development workflow automation (alert when long-running tasks finish)
 - System administration monitoring
 - Integration with cron jobs for periodic idle checks
+
+## Claude Code Hooks
+
+Hooks designed for integration with Claude Code's hook system to automate code quality checks and development workflow tasks.
+
+### Prerequisites
+
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) with hooks configured
+- Python 3.7+ environment
+- Project-specific dependencies (poetry, pre-commit, mypy, ruff as applicable)
+
+### Hook Configuration
+
+Add these hooks to one of your Claude Code settings files:
+- `~/.claude/settings.json` (global user settings)
+- `.claude/settings.json` (project-specific settings)
+- `.claude/settings.local.json` (local project settings, git-ignored)
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/ruff_check.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/git_commit_hook.py"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Configuration Notes**:
+- Matchers support regex patterns for flexible tool matching
+- Project-specific settings override global user settings
+- `.local.json` files are typically git-ignored for local customization
+
+### Scripts
+
+#### `git_commit_hook.py`
+**Purpose**: Automatically runs pre-commit hooks and type checking when git commit commands are detected
+
+**Trigger**: `PreToolUse` with `Bash` matcher - activates before Bash commands are executed
+
+**Features**:
+- 🔍 Detects git commit commands in user prompts
+- 🧹 Runs pre-commit hooks automatically
+- 📝 Stages any files fixed by pre-commit
+- 🔧 Runs mypy type checking
+- 🛡️ Blocks commits if checks fail (exit code 2)
+- 📊 Provides clear error feedback to Claude
+
+**How it works**:
+1. Receives JSON input from Claude Code hook system via stdin
+2. Extracts command from `tool_input.command` field
+3. Checks if command contains "git commit"
+4. Runs pre-commit hooks and exits with blocking error if they fail
+5. Stages any files modified by pre-commit
+6. Runs mypy type checking and exits with blocking error if it fails
+7. Allows commit to proceed if all checks pass
+
+**Dependencies**:
+- `pre-commit` command available in PATH
+- `make mypy` target configured in project Makefile
+
+#### `ruff_check.py`
+**Purpose**: Automatically runs ruff linting and fixes on Python files when they are edited
+
+**Trigger**: `PostToolUse` with `Write|Edit|MultiEdit` matcher - activates after file operations
+
+**Features**:
+- 🎯 Only processes Python files (.py extension)
+- 🔧 Automatically fixes ruff violations where possible
+- ⚠️ Blocks Claude if unfixable issues are found
+- 📋 Provides detailed error messages for manual fixes
+- 🧹 Configurable ignore rules for specific violation types
+- 📊 JSON output parsing for precise error reporting
+
+**Ignore Rules** (currently configured):
+- `F401`: Unused import
+- `F841`: Unused local variable
+- `ARG001/ARG002`: Unused function/method arguments
+- `T201`: Print statements
+- `ERA001`: Commented-out code
+- `S101`: Assert statements
+
+**How it works**:
+1. Receives JSON input from Claude Code hook system via stdin
+2. Extracts file path from `tool_input.file_path` field
+3. Skips non-Python files
+4. Runs ruff with auto-fix and configured ignore rules
+5. Parses JSON output to identify unfixable violations
+6. Blocks Claude with detailed error messages if manual fixes needed
+7. Allows edit to proceed if all issues are auto-fixed
+
+**Dependencies**:
+- `poetry run ruff` command available (or adjust to your ruff installation)
+- Project configured with pyproject.toml or ruff.toml
+
+### Integration Benefits
+
+These hooks provide:
+- 🤖 **Automated Quality**: Runs checks without manual intervention
+- 🔒 **Consistent Standards**: Enforces code quality before commits
+- ⚡ **Fast Feedback**: Immediate error reporting to Claude
+- 🛡️ **Error Prevention**: Blocks problematic changes early
+- 📈 **Productivity**: Reduces manual code review overhead
+
+### Security Notice
+
+⚠️ **Important**: Claude Code hooks execute arbitrary shell commands automatically. Always review hook scripts carefully and ensure they only perform intended operations. These scripts are designed for development workflow automation and should only be used in trusted environments.
