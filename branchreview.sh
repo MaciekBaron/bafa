@@ -4,7 +4,7 @@ set -euo pipefail
 MODEL_NAME="${1:-kimi-k2}"
 TMPFILE="$(mktemp -t branchreview.XXXXXX)"
 cleanup() { rm -f "$TMPFILE"; }
-trap cleanup EXIT
+trap cleanup EXIT INT TERM
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   echo "Error: not a git repository." >&2
