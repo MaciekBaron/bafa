@@ -24,6 +24,7 @@ Scripts are written in Bash and Python.
   - [whitespacefix.sh](#whitespacefixsh)
   - [commitreview.sh](#commitreviewsh)
   - [geminifeedback.sh](#geminifeedbacksh)
+  - [branchreview.sh](#branchreviewsh)
 - [System Monitoring Scripts](#system-monitoring-scripts)
   - [idle-check.sh](#idle-checksh)
 - [Claude Code Hooks](#claude-code-hooks)
@@ -434,6 +435,42 @@ This script is ideal for development hooks that need to detect and fix whitespac
 **Output**: Detailed review feedback with specific file references and actionable suggestions
 
 **Note**: Similar to commitreview.sh but specifically uses Google's Gemini model. Choose based on your preferred AI provider or model performance for your codebase.
+
+### `branchreview.sh`
+**Purpose**: Automated code review of branch changes comparing current branch against main using AI models via llm CLI
+
+**Usage**:
+```bash
+# Review with default model (kimi-k2)
+./branchreview.sh
+
+# Review with specific model
+./branchreview.sh claude-3-5-sonnet
+./branchreview.sh gpt-4o
+```
+
+**Features**:
+- 🔍 Automatically analyzes git diff between main and current branch (main...HEAD)
+- 🤖 Uses configurable AI models via llm CLI (default: kimi-k2)
+- 🎯 Focuses on bugs, style violations, and improvements across entire branch
+- 📋 Provides concise, actionable feedback with minimal praise
+- 🧹 Respects Python line length limits (120 chars per ruff config)
+- 🔧 Temporary file cleanup with trap handling
+- ⚡ Ignores minor issues like final newline problems
+- 📊 Only provides feedback when sufficient context is available
+
+**Prerequisites**:
+- [llm CLI](https://llm.datasette.io/) installed and configured
+- Git repository with main branch and feature branch
+
+**AI Analysis Focus**:
+- Potential bugs and logic errors
+- Code style violations
+- Performance improvements
+- File-specific recommendations
+- Context-aware feedback (no guessing)
+
+**Output**: Detailed review feedback comparing all changes in current branch against main, with specific file references and actionable suggestions
 
 ## System Monitoring Scripts
 
