@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-MODEL_NAME="${1:-horizon}"
+MODEL_NAME="${1:-kimi-k2}"
 TMP_FILE="commitreview.tmp"
 trap 'rm commitreview.tmp' EXIT
 

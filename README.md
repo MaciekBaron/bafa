@@ -371,7 +371,7 @@ This script is ideal for development hooks that need to detect and fix whitespac
 
 **Usage**:
 ```bash
-# Review with default model (horizon)
+# Review with default model
 ./commitreview.sh
 
 # Review with specific model
@@ -393,7 +393,7 @@ This script is ideal for development hooks that need to detect and fix whitespac
 - Git repository with commits
 
 **AI Analysis Focus**:
-- Potential bugs and logic errors  
+- Potential bugs and logic errors
 - Code style violations
 - Performance improvements
 - Architecture suggestions
@@ -413,7 +413,7 @@ This script is ideal for development hooks that need to detect and fix whitespac
 **Features**:
 - 🔍 Automatically analyzes git diff of HEAD commit
 - 🤖 Uses Google Gemini AI via gemini CLI
-- 🎯 Focuses on bugs, style violations, and improvements  
+- 🎯 Focuses on bugs, style violations, and improvements
 - 📋 Provides concise, actionable feedback
 - 🧹 Respects Python line length limits (120 chars per ruff config)
 - 🔧 Temporary file cleanup with trap handling
@@ -427,7 +427,7 @@ This script is ideal for development hooks that need to detect and fix whitespac
 **AI Analysis Focus**:
 - Potential bugs and logic errors
 - Code style violations
-- Performance improvements  
+- Performance improvements
 - Architecture suggestions
 - File-specific recommendations
 
