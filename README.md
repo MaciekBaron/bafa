@@ -22,6 +22,8 @@ Scripts are written in Bash and Python.
   - [git-claude-worktree.sh](#git-claude-worktreesh)
 - [Code Quality Scripts](#code-quality-scripts)
   - [whitespacefix.sh](#whitespacefixsh)
+  - [commitreview.sh](#commitreviewsh)
+  - [geminifeedback.sh](#geminifeedbacksh)
 - [System Monitoring Scripts](#system-monitoring-scripts)
   - [idle-check.sh](#idle-checksh)
 - [Claude Code Hooks](#claude-code-hooks)
@@ -363,6 +365,75 @@ This script is ideal for development hooks that need to detect and fix whitespac
 - Empty lines containing only whitespace characters
 - Missing newline at end of file
 - Multiple trailing newlines (reduces to single newline)
+
+### `commitreview.sh`
+**Purpose**: Automated code review of the latest commit using AI models via llm CLI
+
+**Usage**:
+```bash
+# Review with default model (horizon)
+./commitreview.sh
+
+# Review with specific model
+./commitreview.sh claude-3-5-sonnet
+./commitreview.sh gpt-4o
+```
+
+**Features**:
+- 🔍 Automatically analyzes git diff of HEAD commit
+- 🤖 Uses configurable AI models via llm CLI
+- 🎯 Focuses on bugs, style violations, and improvements
+- 📋 Provides concise, actionable feedback
+- 🧹 Respects Python line length limits (120 chars per ruff config)
+- 🔧 Temporary file cleanup with trap handling
+- ⚡ Ignores minor issues and focuses on substantial feedback
+
+**Prerequisites**:
+- [llm CLI](https://llm.datasette.io/) installed and configured
+- Git repository with commits
+
+**AI Analysis Focus**:
+- Potential bugs and logic errors  
+- Code style violations
+- Performance improvements
+- Architecture suggestions
+- File-specific recommendations
+
+**Output**: Detailed review feedback with specific file references and actionable suggestions
+
+### `geminifeedback.sh`
+**Purpose**: Automated code review of the latest commit using Google's Gemini AI model
+
+**Usage**:
+```bash
+# Review latest commit with Gemini
+./geminifeedback.sh
+```
+
+**Features**:
+- 🔍 Automatically analyzes git diff of HEAD commit
+- 🤖 Uses Google Gemini AI via gemini CLI
+- 🎯 Focuses on bugs, style violations, and improvements  
+- 📋 Provides concise, actionable feedback
+- 🧹 Respects Python line length limits (120 chars per ruff config)
+- 🔧 Temporary file cleanup with trap handling
+- ⚡ Ignores minor issues and focuses on substantial feedback
+
+**Prerequisites**:
+- `gemini` CLI tool installed and configured
+- Git repository with commits
+- Google AI API access configured
+
+**AI Analysis Focus**:
+- Potential bugs and logic errors
+- Code style violations
+- Performance improvements  
+- Architecture suggestions
+- File-specific recommendations
+
+**Output**: Detailed review feedback with specific file references and actionable suggestions
+
+**Note**: Similar to commitreview.sh but specifically uses Google's Gemini model. Choose based on your preferred AI provider or model performance for your codebase.
 
 ## System Monitoring Scripts
 
